@@ -36,6 +36,16 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    userRole: {
+      type: String,
+      enum: ['manager', 'user'],
+      required: true,
+      default: 'user',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 )

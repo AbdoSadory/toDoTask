@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import * as userControllers from './user.controllers.js'
+import * as userDataValidationSchemas from '../../utils/dataValidationSchemas/user.dataValidatorSchema.js'
+import { authHandler } from '../../middlewares/authHandler.js'
 const userRouter = Router()
 /*
 1-signUp
@@ -11,5 +13,20 @@ const userRouter = Router()
 6-soft delete(user must be logged in)
 */
 
-userRouter.post('/signUp', expressAsyncHandler(userControllers.signUp))
+userRouter.post(
+  '/signUp',
+  userDataValidationSchemas.signUpCheckSchema,
+  expressAsyncHandler(userControllers.signUp)
+)
+userRouter.post(
+  '/login',
+  userDataValidationSchemas.loginCheckSchema,
+  expressAsyncHandler(userControllers.login)
+)
+userRouter.put(
+  '/changePassword',
+  userDataValidationSchemas.changePasswordCheckSchema,
+  authHandler(),
+  expressAsyncHandler(userControllers.changePassword)
+)
 export default userRouter
