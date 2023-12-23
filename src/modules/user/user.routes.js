@@ -29,4 +29,20 @@ userRouter.put(
   authHandler(),
   expressAsyncHandler(userControllers.changePassword)
 )
+userRouter.put(
+  '/updateProfile',
+  userDataValidationSchemas.updateUserDataCheckSchema,
+  authHandler(),
+  expressAsyncHandler(userControllers.updateUser)
+)
+userRouter.put(
+  '/deactivateAccount',
+  authHandler(),
+  expressAsyncHandler(userControllers.deactivateUser)
+)
+userRouter.delete(
+  '/deleteProfile',
+  authHandler(),
+  expressAsyncHandler(userControllers.deleteUser)
+)
 export default userRouter

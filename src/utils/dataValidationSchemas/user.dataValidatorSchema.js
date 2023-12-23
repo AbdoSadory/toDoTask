@@ -71,3 +71,12 @@ export const changePasswordCheckSchema = checkSchema(
   },
   ['body']
 )
+
+export const updateUserDataCheckSchema = checkSchema(
+  {
+    firstName: { errorMessage: 'Invalid firstName', notEmpty: true },
+    lastName: { errorMessage: 'Invalid lastName', notEmpty: true },
+    age: { errorMessage: 'Invalid age', notEmpty: true, isNumeric: true },
+  },
+  ['body']
+)

@@ -5,6 +5,12 @@ import bcryptjs from 'bcryptjs'
 import generateUserToken from '../../utils/generateUserToken.js'
 
 export const signUp = async (req, res, next) => {
+  /*
+  1- Check on Incoming Data using express validator
+  2- Check on email if it's duplicated
+  3- Hashing Password
+  4- Create User
+  */
   const result = validationResult(req)
   if (result.errors.length) {
     let errorMsgs = ''
@@ -24,7 +30,6 @@ export const signUp = async (req, res, next) => {
     )
   }
   const username = firstName.trim() + ' ' + lastName.trim()
-  console.log(process.env.SALT)
   const hashedPassword = bcryptjs.hashSync(password, parseInt(process.env.SALT))
   const newUser = await dbMethods.createDocument(User, {
     username,
@@ -47,6 +52,13 @@ export const signUp = async (req, res, next) => {
 }
 
 export const login = async (req, res, next) => {
+  /*
+  1- Check on Incoming Data using express validator 
+  2- Find User with email
+  3- Check if incoming password doesn't match the Database hashed password
+  4- Create Token
+  5- Send token and profile data
+  */
   const result = validationResult(req)
   if (result.errors.length) {
     let errorMsgs = ''
@@ -81,6 +93,12 @@ export const login = async (req, res, next) => {
 }
 
 export const changePassword = async (req, res, next) => {
+  /*
+  1- Check on Incoming Data using express validator 
+  2- Check if incoming password doesn't match the Database hashed password
+  3- Hashing Password
+  4- update password
+  */
   const result = validationResult(req)
   if (result.errors.length) {
     let errorMsgs = ''
@@ -115,4 +133,73 @@ export const changePassword = async (req, res, next) => {
   res
     .status(updateUser.status)
     .json({ message: updateUser.message, user: updateUser.result })
+}
+
+export const updateUser = async (req, res, next) => {
+  /*
+  1- Check on Incoming Data using express validator 
+  2- update user data
+  */
+  const result = validationResult(req)
+  if (result.errors.length) {
+    let errorMsgs = ''
+    result.errors.forEach((element) => {
+      errorMsgs += ', ' + element.msg
+    })
+    return next(new Error(errorMsgs, { cause: 400 }))
+  }
+  const { firstName, lastName, age } = req.body
+  const { authUser } = req
+  const username = firstName.trim() + ' ' + lastName.trim()
+  const updateUser = await dbMethods.findByIdAndUpdateDocument(
+    User,
+    authUser._id,
+    { username, age }
+  )
+
+  if (!updateUser.success) {
+    return next(new Error(updateUser.message, { cause: updateUser.status }))
+  }
+
+  res
+    .status(updateUser.status)
+    .json({ message: updateUser.message, user: updateUser.result })
+}
+
+export const deleteUser = async (req, res, next) => {
+  /*
+  1- Delete user data 
+  */
+  const { authUser } = req
+  const deleteUser = await dbMethods.findByIdAndDeleteDocument(
+    User,
+    authUser._id
+  )
+
+  if (!deleteUser.success) {
+    return next(new Error(deleteUser.message, { cause: deleteUser.status }))
+  }
+
+  res.status(deleteUser.status).json({ message: deleteUser.message })
+}
+
+export const deactivateUser = async (req, res, next) => {
+  /*
+  1- Deactivate user data 
+  */
+  const { authUser } = req
+  const updateUser = await dbMethods.findByIdAndUpdateDocument(
+    User,
+    authUser._id,
+    { isDeleted: true }
+  )
+
+  if (!updateUser.success) {
+    return next(new Error(updateUser.message, { cause: updateUser.status }))
+  }
+
+  res.status(updateUser.status).json({
+    message:
+      'Account is deactivated successfully and will be active once you login ',
+  })
 }
