@@ -4,6 +4,22 @@ import User from '../../../DB/models/user.model.js'
 import bcryptjs from 'bcryptjs'
 import generateUserToken from '../../utils/generateUserToken.js'
 
+export const getProfile = async (req, res, next) => {
+  /*
+  Check token in middleware
+  1- get profile data 
+  */
+  const { authUser } = req
+  const user = await dbMethods.findByIdDocument(User, authUser._id)
+  if (!user.success) {
+    return next(
+      new Error(user.message, {
+        cause: user.status,
+      })
+    )
+  }
+  res.status(user.status).json({ message: user.message, user: user.result })
+}
 export const signUp = async (req, res, next) => {
   /*
   1- Check on Incoming Data using express validator
@@ -50,7 +66,6 @@ export const signUp = async (req, res, next) => {
     user: newUser.result,
   })
 }
-
 export const login = async (req, res, next) => {
   /*
   1- Check on Incoming Data using express validator 
@@ -94,6 +109,7 @@ export const login = async (req, res, next) => {
 
 export const changePassword = async (req, res, next) => {
   /*
+  Check token in middleware
   1- Check on Incoming Data using express validator 
   2- Check if incoming password doesn't match the Database hashed password
   3- Hashing Password
@@ -137,6 +153,7 @@ export const changePassword = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   /*
+  Check token in middleware
   1- Check on Incoming Data using express validator 
   2- update user data
   */
@@ -168,6 +185,7 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   /*
+  Check token in middleware
   1- Delete user data 
   */
   const { authUser } = req
@@ -185,6 +203,7 @@ export const deleteUser = async (req, res, next) => {
 
 export const deactivateUser = async (req, res, next) => {
   /*
+  Check token in middleware
   1- Deactivate user data 
   */
   const { authUser } = req

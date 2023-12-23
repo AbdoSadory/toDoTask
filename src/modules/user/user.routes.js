@@ -12,7 +12,11 @@ const userRouter = Router()
 5-delete user(user must be logged in) 
 6-soft delete(user must be logged in)
 */
-
+userRouter.get(
+  '/profile',
+  authHandler(),
+  expressAsyncHandler(userControllers.getProfile)
+)
 userRouter.post(
   '/signUp',
   userDataValidationSchemas.signUpCheckSchema,
