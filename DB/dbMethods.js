@@ -72,9 +72,13 @@ export const deleteOneDocument = async (modelName, query) => {
 }
 
 export const findByIdAndUpdateDocument = async (modelName, query, newData) => {
-  const updateDocument = await modelName.findByIdAndUpdate(query, newData, {
-    new: true,
-  })
+  const updateDocument = await modelName.findByIdAndUpdate(
+    query,
+    { $set: newData, $inc: { __v: 1 } },
+    {
+      new: true,
+    }
+  )
   if (!updateDocument) {
     return {
       message: `No Document has been updated`,

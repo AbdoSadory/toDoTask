@@ -11,14 +11,14 @@ export const authHandler = () => {
         return next(new Error('You have to login', { cause: 400 }))
 
       if (!accesstoken.startsWith(process.env.TOKEN_PREFIX))
-        return next(new Error('invalid token prefix', { cause: 400 }))
+        return next(new Error('invalid token prefix', { cause: 401 }))
 
       const token = accesstoken.split(process.env.TOKEN_PREFIX)[1]
 
       const decodedData = jwt.verify(token, process.env.TOKEN_SECRET_CODE)
 
       if (!decodedData || !decodedData.id)
-        return next(new Error('invalid token payload', { cause: 400 }))
+        return next(new Error('invalid token payload', { cause: 401 }))
 
       const findUser = await findByIdDocument(User, decodedData.id)
       if (!findUser.success)
