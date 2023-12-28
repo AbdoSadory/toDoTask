@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import * as userControllers from './user.controllers.js'
-import * as userDataValidationSchemas from '../../utils/dataValidationSchemas/user.dataValidatorSchema.js'
+import * as userDataValidationSchemas from '../../middlewares/dataValidationSchemas/user.dataValidatorSchema.js'
 import { authHandler } from '../../middlewares/authHandler.js'
 const userRouter = Router()
 /*

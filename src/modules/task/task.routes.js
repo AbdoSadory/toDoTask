@@ -2,7 +2,7 @@ import { Router } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import { authHandler } from '../../middlewares/authHandler.js'
 import * as taskControllers from './task.controllers.js'
-import * as taskDataValidationSchemas from '../../utils/dataValidationSchemas/task.dataValidatorSchema.js'
+import * as taskDataValidationSchemas from '../../middlewares/dataValidationSchemas/task.dataValidatorSchema.js'
 import authorizationHandler from '../../middlewares/authorizationHandler.js'
 const taskRouter = Router()
 
