@@ -37,7 +37,6 @@ export const signUp = async (req, res, next) => {
   }
   const { firstName, lastName, age, email, password, gender, phone, userRole } =
     req.body
-  const { profileImage } = req.file
   const isUserExisted = await dbMethods.findOneDocument(User, { email })
   if (isUserExisted.success) {
     return next(
