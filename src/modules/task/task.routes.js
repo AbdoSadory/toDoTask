@@ -2,8 +2,9 @@ import { Router } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import { authHandler } from '../../middlewares/authHandler.js'
 import * as taskControllers from './task.controllers.js'
-import * as taskDataValidationSchemas from '../../middlewares/dataValidationSchemas/task.dataValidatorSchema.js'
+import * as taskDataValidationSchemas from './task.dataValidatorSchema.js'
 import authorizationHandler from '../../middlewares/authorizationHandler.js'
+import validationMiddleware from '../../middlewares/validationMiddleware.js'
 const taskRouter = Router()
 
 taskRouter.get('/allTasks', expressAsyncHandler(taskControllers.allTasks))
@@ -19,27 +20,27 @@ taskRouter.get(
 taskRouter.post(
   '/addTask',
   authHandler(),
-  taskDataValidationSchemas.addTaskCheckSchema,
+  validationMiddleware(taskDataValidationSchemas.addTaskCheckSchema),
   expressAsyncHandler(taskControllers.addTask)
 )
 taskRouter.put(
   '/updateTask',
   authHandler(),
-  taskDataValidationSchemas.updateTaskCheckSchema,
+  validationMiddleware(taskDataValidationSchemas.updateTaskCheckSchema),
   expressAsyncHandler(taskControllers.updateTask)
 )
 taskRouter.put(
   '/assignTaskToUser',
   authHandler(),
   authorizationHandler('manager'),
-  taskDataValidationSchemas.assignToUserCheckSchema,
+  validationMiddleware(taskDataValidationSchemas.assignToUserCheckSchema),
   expressAsyncHandler(taskControllers.assignTaskToUser)
 )
 
 taskRouter.delete(
   '/deleteTask',
   authHandler(),
-  taskDataValidationSchemas.deleteTaskCheckSchema,
+  validationMiddleware(taskDataValidationSchemas.deleteTaskCheckSchema),
   expressAsyncHandler(taskControllers.deleteTask)
 )
 export default taskRouter

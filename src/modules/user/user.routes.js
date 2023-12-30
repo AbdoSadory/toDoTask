@@ -1,8 +1,10 @@
 import { Router } from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import * as userControllers from './user.controllers.js'
-import * as userDataValidationSchemas from '../../middlewares/dataValidationSchemas/user.dataValidatorSchema.js'
+import * as userDataValidationSchemas from './user.dataValidatorSchema.js'
 import { authHandler } from '../../middlewares/authHandler.js'
+import validationMiddleware from '../../middlewares/validationMiddleware.js'
+import uploadingFilesHandler from '../../middlewares/uploadingfilesHandler.js'
 const userRouter = Router()
 /*
 1-signUp
@@ -11,6 +13,7 @@ const userRouter = Router()
 4-update user (age , firstName , lastName)(user must be logged in)
 5-delete user(user must be logged in) 
 6-soft delete(user must be logged in)
+7-add profile pic
 */
 userRouter.get(
   '/profile',
@@ -19,24 +22,24 @@ userRouter.get(
 )
 userRouter.post(
   '/signUp',
-  userDataValidationSchemas.signUpCheckSchema,
+  validationMiddleware(userDataValidationSchemas.signUpSchema),
   expressAsyncHandler(userControllers.signUp)
 )
 userRouter.post(
   '/login',
-  userDataValidationSchemas.loginCheckSchema,
+  validationMiddleware(userDataValidationSchemas.loginSchema),
   expressAsyncHandler(userControllers.login)
 )
 userRouter.put(
   '/changePassword',
-  userDataValidationSchemas.changePasswordCheckSchema,
   authHandler(),
+  validationMiddleware(userDataValidationSchemas.changePasswordSchema),
   expressAsyncHandler(userControllers.changePassword)
 )
 userRouter.put(
   '/updateProfile',
-  userDataValidationSchemas.updateUserDataCheckSchema,
   authHandler(),
+  validationMiddleware(userDataValidationSchemas.updateUserDataSchema),
   expressAsyncHandler(userControllers.updateUser)
 )
 userRouter.put(
@@ -48,5 +51,12 @@ userRouter.delete(
   '/deleteProfile',
   authHandler(),
   expressAsyncHandler(userControllers.deleteUser)
+)
+
+userRouter.post(
+  '/addProfileImage',
+  authHandler(),
+  uploadingFilesHandler({ filePath: 'profileImages' }).single('profileImg'),
+  expressAsyncHandler(userControllers.uploadProfileImage)
 )
 export default userRouter

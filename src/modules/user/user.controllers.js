@@ -37,6 +37,7 @@ export const signUp = async (req, res, next) => {
   }
   const { firstName, lastName, age, email, password, gender, phone, userRole } =
     req.body
+  const { profileImage } = req.file
   const isUserExisted = await dbMethods.findOneDocument(User, { email })
   if (isUserExisted.success) {
     return next(
@@ -221,4 +222,22 @@ export const deactivateUser = async (req, res, next) => {
     message:
       'Account is deactivated successfully and will be active once you login ',
   })
+}
+
+export const uploadProfileImage = async (req, res, next) => {
+  const { authUser } = req
+  const imgPath = req.filePath + '/' + req.file.filename
+  const updateUser = await dbMethods.findByIdAndUpdateDocument(
+    User,
+    authUser._id,
+    { profileImage: imgPath }
+  )
+
+  if (!updateUser.success) {
+    return next(new Error(updateUser.message, { cause: updateUser.status }))
+  }
+
+  res
+    .status(updateUser.status)
+    .json({ message: updateUser.message, user: updateUser.result })
 }

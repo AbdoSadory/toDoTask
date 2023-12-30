@@ -4,11 +4,17 @@ import userRouter from './src/modules/user/user.routes.js'
 import db_connection from './DB/connection.js'
 import globalErrorHandler from './src/middlewares/globalErrorHandler.js'
 import taskRouter from './src/modules/task/task.routes.js'
+import path from 'path'
+
 config()
+
 const app = express()
+
 db_connection()
+
 app.use(express.json())
 
+app.use('/static', express.static(path.resolve('src/uploads')))
 app.use('/users', userRouter)
 app.use('/tasks', taskRouter)
 
