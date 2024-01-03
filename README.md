@@ -50,7 +50,7 @@ Following ExpressJS Structure:
   |   |      |      ├── routes.js
   |   |      ├── tasks
   |   |      |      ├── controllers.js
-  |   |      |      └── routes.js
+  |   |      └──    └── routes.js
   |   ├── utils
   |   └── uploads
   ├── index.js
