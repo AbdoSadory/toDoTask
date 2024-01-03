@@ -41,16 +41,16 @@ Following ExpressJS Structure:
 ```
   ├── DB
   |   ├── models
-  |   ├── connection.js
+  |   └── connection.js
   ├── src
   |   ├── middlewares
   │   ├── modules
   |   |      ├── users
   |   |      |      ├── controllers.js
-  |   |      |      ├── routes.js
-  |   |      ├── tasks
-  |   |      |      ├── controllers.js
-  |   |      └──    └── routes.js
+  |   |      |      └── routes.js
+  |   |      └── tasks
+  |   |             ├── controllers.js
+  |   |             └── routes.js
   |   ├── utils
   |   └── uploads
   ├── index.js
