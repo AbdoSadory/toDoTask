@@ -42,16 +42,27 @@ Following ExpressJS Structure:
   ├── DB
   |   ├── models
   |   ├── connection.js
+  |   └── dbMethods.js
   ├── src
   |   ├── middlewares
+  |   |      ├── authHandler.js
+  |   |      ├── authorizationHandler.js
+  |   |      ├── globalErrorHandler.js
+  |   |      ├── uploadingFilesHandler.js
+  |   |      └── validationMiddleware.js
   │   ├── modules
   |   |      ├── users
   |   |      |      ├── controllers.js
-  |   |      |      ├── routes.js
+  |   |      |      ├── dataValidationSchema.js
+  |   |      |      └── routes.js
   |   |      ├── tasks
   |   |      |      ├── controllers.js
-  |   |      |      └── routes.js
+  |   |      |      ├── dataValidationSchema.js
+  |   |      └──    └── routes.js
   |   ├── utils
+  |   |      ├── allowedExtensions.js
+  |   |      ├── generateUserToken.js
+  |   |      └── generateUniqueString.js
   |   └── uploads
   ├── index.js
   ├── .env
