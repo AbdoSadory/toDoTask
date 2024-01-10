@@ -72,6 +72,8 @@ Following ExpressJS Structure:
 
 ## Endpoints
 
+### Check APIs Documentation : https://documenter.getpostman.com/view/27228437/2s9YsKgBt3
+
 ### User
 
 | Method | URL                        | Description                                     |

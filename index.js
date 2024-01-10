@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { config } from 'dotenv'
 import userRouter from './src/modules/user/user.routes.js'
 import db_connection from './DB/connection.js'
@@ -11,9 +12,9 @@ config()
 const app = express()
 
 db_connection()
+const corsOptions = { origin: '*' }
 
-app.use(express.json())
-
+app.use(cors(corsOptions), express.json())
 app.use('/static', express.static(path.resolve('src/uploads')))
 app.use('/users', userRouter)
 app.use('/tasks', taskRouter)
@@ -24,6 +25,6 @@ app.use('*', (req, res, next) => {
 
 app.use(globalErrorHandler)
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log('Server is on Port 3000 🔥🔥🔥🔥')
 })
