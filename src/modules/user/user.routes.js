@@ -1,10 +1,12 @@
 import { Router } from 'express'
 import expressAsyncHandler from 'express-async-handler'
+import { authHandler } from '../../middlewares/authHandler.js'
+import allowedExtensions from '../../utils/allowedExtensions.js'
+import uploadingFilesHandler from '../../middlewares/uploadingFilesHandler.js'
 import * as userControllers from './user.controllers.js'
 import * as userDataValidationSchemas from './user.dataValidatorSchema.js'
-import { authHandler } from '../../middlewares/authHandler.js'
 import validationMiddleware from '../../middlewares/validationMiddleware.js'
-import uploadingFilesHandler from '../../middlewares/uploadingfilesHandler.js'
+
 const userRouter = Router()
 /*
 1-signUp
@@ -56,7 +58,10 @@ userRouter.delete(
 userRouter.post(
   '/addProfileImage',
   authHandler(),
-  uploadingFilesHandler({ filePath: 'profileImages' }).single('profileImg'),
+  uploadingFilesHandler({
+    extensions: allowedExtensions.image,
+    filePath: 'profileImages',
+  }).single('profileImg'),
   expressAsyncHandler(userControllers.uploadProfileImage)
 )
 export default userRouter

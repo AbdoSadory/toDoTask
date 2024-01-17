@@ -1,8 +1,8 @@
+import fs from 'fs'
+import path from 'path'
 import multer from 'multer'
 import generateUniqueString from '../utils/generateUniqueString.js'
 import allowedExtensions from '../utils/allowedExtensions.js'
-import fs from 'fs'
-import path from 'path'
 
 export const uploadingFilesHandler = ({
   extensions = allowedExtensions.image,
