@@ -15,12 +15,12 @@ db_connection()
 const corsOptions = { origin: '*' }
 
 app.use(cors(corsOptions), express.json())
-app.use('/', (req, res, next) => {
-  res.status(200).json({ message: 'Welcome To ToDo Tasks APP APIs' })
-})
 app.use('/static', express.static(path.resolve('src/uploads')))
 app.use('/users', userRouter)
 app.use('/tasks', taskRouter)
+app.use('/', (req, res, next) => {
+  res.status(200).json({ message: 'Welcome To ToDo Tasks APP APIs' })
+})
 
 app.use('*', (req, res, next) => {
   res.status(400).json({ message: 'Invalid URL' })
